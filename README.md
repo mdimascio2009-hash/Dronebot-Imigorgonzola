@@ -12,7 +12,7 @@ Il nostro progetto si distingue per due punti di forza principali: semplicità e
 
 # flowchart
 
-A. Inizio:decollo drone
+A. Inizio: decollo drone
 B. ricerca fuoco con la rete neurale YOLO
 C. fuoco trovato?    C1. no > B   C2. si > D
 D. drone si posiziona sopra il rover
