@@ -10,6 +10,8 @@ Il nostro progetto si distingue per due punti di forza principali: semplicità e
 
 # innovazioni
 
+l'innovazione sta nel programmare un rover della lego non nel modo classico coi blocchi ma utilizzando librerie python avanzate per computer vision come cv2 e utilizzando anche yolo per l'object detection.
+
 # flowchart
 
 A. Inizio: decollo drone  
@@ -182,3 +184,55 @@ while True:
 
         cv2.imshow("Guida rover", frame)      # Mostrare il frame
         cv2.waitKey(1)
+
+# codice MobaXterm
+
+import socket
+from ev3dev2.motor import MoveTank, OUTPUT_B, OUTPUT_C
+
+HOST = '0.0.0.0'
+PORT = 65432
+
+tank = MoveTank(OUTPUT_B, OUTPUT_C)
+tank.stop_action = "brake"
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind((HOST, PORT))
+server.listen(1)
+
+print("Server EV3 in ascolto...")
+
+while True:
+    conn, addr = server.accept()
+    print("Connesso a", addr)
+
+    try:
+        data = conn.recv(1024).decode()
+        print("Comando ricevuto:", data)
+
+        if data.startswith("ROTATE:"):
+            parts = data.split(":")
+            power = int(parts[1])
+            gradi = float(parts[2])
+
+            tank.on_for_degrees(power, -power, gradi)
+            conn.send("OK ROTATE".encode())
+
+        # FORWARD
+        elif data.startswith("FORWARD:"):
+            parts = data.split(":")
+            power = int(parts[1])
+            gradi = float(parts[2])
+
+            tank.on_for_degrees(power, power, gradi)
+            conn.send("OK FORWARD".encode())
+
+        # STOP 
+        elif data == "STOP":
+            tank.off()
+            conn.send("OK STOP".encode())
+
+    except Exception as e:
+        print("Errore:", e)
+
+    conn.close()
