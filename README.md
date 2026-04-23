@@ -25,8 +25,7 @@ A. Inizio: decollo drone
 ---->  I. fuoco raggiunto?    I1. no ----> E    I2. si ----> J
 ---->  J. Fine: raggiunto obbiettivo
 
-# codice
-
+# codice rover client
 from ultralytics import YOLO   # Importazione librerie
 import cv2
 import numpy as np
@@ -185,7 +184,7 @@ while True:
         cv2.imshow("Guida rover", frame)      # Mostrare il frame
         cv2.waitKey(1)
 
-# codice MobaXterm
+# codice MobaXterm server
 
 import socket
 from ev3dev2.motor import MoveTank, OUTPUT_B, OUTPUT_C
